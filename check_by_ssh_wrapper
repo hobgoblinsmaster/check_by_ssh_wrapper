@@ -1,0 +1,70 @@
+#!/bin/bash
+#
+# check_by_ssh_wrapper
+#
+# This script provides access to commands declared in nrpe to check_by_ssh
+# Please set the nrpeconf variable to the right value
+# You must generate a ssh key on the nagios server, copy it in .ssh/authorized_keys
+# in nagios (or nrpe) user home directory on distant server, then add this at
+# the begining of the line juste before the key:
+# no-pty,no-port-forwarding,command="/home/nagios/nagios_check.sh $SSH_ORIGINAL_COMMAND"
+# 
+# You can the use $USER1$/check_by_ssh -H <distant host> -l nagios -C 'check_cmd [args]'
+#
+# Freely inspired by nagios_ssh_framework. Can be used when nrpe port can't be accessed
+# or check_command returns to many text for nrpe and you want to keep facilities of nrpe
+# config files.
+#
+# Changes an Modifications:
+# 2011-10-12 - Landry MINOZA - V 1.0
+# Created because check_disks returns to many lines for nrpe with one of my servers
+# 
+# Copyright: Telbase Formation Conseil, MUSEE D'ORSAY 2011
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Set main nrpe.cfg file
+nrpeconf=/etc/nagios/nrpe.cfg
+
+# Get cmdname
+cmdname=$1
+if [ -z "$cmdname" ] ; then
+	echo "WARNING, no command name provided"
+	exit 1
+fi
+shift
+# Get optionnal args
+cmdargs=$@
+
+# Declare an array of commands
+declare -A command
+
+# find all nrpe conf files
+include=$(sed -ne '/^include=/ s/^.*=// p' $nrpeconf)
+include_dir=$(sed -ne '/^include_dir=/ s/^.*=// p' $nrpeconf)
+
+# Parse all nrpe conf files for command[*]= arguments
+for cfgfile in $(echo -e "$nrpeconf\n${include}\n${include_dir}*.cfg") ;do
+	eval $(sed -ne '/^command\[/ s/=\(.*\)$/="\1"/ p' $cfgfile)
+done
+
+# Check if command[$cmdname] exists
+if [ -z "${command[$cmdname]}" ] ; then
+	echo "WARNING, command $cmdname does not exist"
+	exit 1
+fi
+
+# Launch check
+exec ${command[$cmdname]} $cmdargs
+exit
