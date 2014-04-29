@@ -2,7 +2,7 @@ check_by_ssh_wrapper
 ====================
 
 <!-- Piwik Image Tracker-->
-<img src="https://stats.hobgoblins-master.info/piwik.php?idSite=2&rec=1" style="border:0" alt="" />
+<img src="https://stats.hobgoblins-master.info/piwik.php?idSite=2&amp;rec=1" style="border:0" alt="" />
 <!-- End Piwik -->
 
 This script provides access to commands declared in nrpe to check_by_ssh.
