@@ -1,7 +1,12 @@
 check_by_ssh_wrapper
+====================
 
-This script provides access to commands declared in nrpe to check_by_ssh
-Please set the nrpeconf variable to the right value
+<!-- Piwik Image Tracker-->
+<img src="https://stats.hobgoblins-master.info/piwik.php?idSite=2&rec=1" style="border:0" alt="" />
+<!-- End Piwik -->
+
+This script provides access to commands declared in nrpe to check_by_ssh.
+Please set the nrpeconf variable to the right value.
 You must generate a ssh key on the nagios server, copy it in .ssh/authorized_keys
 in nagios (or nrpe) user home directory on distant server, then add this at
 the begining of the line juste before the key:
@@ -12,6 +17,8 @@ You can the use $USER1$/check_by_ssh -H <distant host> -l nagios -C 'check_cmd [
 Freely inspired by nagios_ssh_framework. Can be used when nrpe port can't be accessed
 or check_command returns to many text for nrpe and you want to keep facilities of nrpe
 config files.
+
+[See my blog](http://hobgoblins-master.info/en/posts/check_by_ssh_wrapper.html)
 
 Changes an Modifications:
 2011-10-12 - Landry MINOZA - V 1.0
@@ -31,7 +38,3 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-<!-- Piwik Image Tracker-->
-<img src="https://stats.hobgoblins-master.info/piwik.php?idSite=2&rec=1" style="border:0" alt="" />
-<!-- End Piwik -->
