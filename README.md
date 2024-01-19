@@ -10,7 +10,7 @@ the begining of the line juste before the key:
 no-pty,no-port-forwarding,command="/usr/local/bin/check_by_ssh_wrapper $SSH_ORIGINAL_COMMAND"
 ```
 
-You can then use $USER1$/check_by_ssh -H <distant host> -l nagios -C 'check_cmd [args]'
+You can then use `$USER1$/check_by_ssh -H <distant host> -l nagios -C 'check_cmd [args]'`
 
 Freely inspired by nagios_ssh_framework. Can be used when nrpe port can't be accessed
 or check_command returns to many text for nrpe and you want to keep facilities of nrpe
